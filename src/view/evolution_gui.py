@@ -26,17 +26,17 @@ class MainWindow(QMainWindow):
 
         # main parents
 
-        self.main1 = QMovie("imgs/iteration1_main.png")
+        self.main1 = QMovie("../../imgs/iteration1_main.png")
         self.main1.frameChanged.connect(self.repaint)
         self.main1.setScaledSize(PyQt5.QtCore .QSize(self.ref_size, self.ref_size))
         self.main1.start()
 
-        self.main2 = QMovie("imgs/iteration2_main.gif")
+        self.main2 = QMovie("../../imgs/iteration2_main.gif")
         self.main2.frameChanged.connect(self.repaint)
         self.main2.setScaledSize(PyQt5.QtCore.QSize(self.ref_size, self.ref_size))
         self.main2.start()
 
-        self.main3 = QMovie("imgs/iteration4_main.gif")
+        self.main3 = QMovie("../../imgs/iteration4_main.gif")
         self.main3.frameChanged.connect(self.repaint)
         self.main3.setScaledSize(PyQt5.QtCore .QSize(self.ref_size, self.ref_size))
         self.main3.start()
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         self.iteration1_candidate1.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow1_1 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow1_1.setPixmap(pixmap)
         arrow1_1.resize(50, 60)
@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
         self.iteration1_candidate2.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow1_2 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow1_2.setPixmap(pixmap)
         arrow1_2.resize(50, 60)
@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
         self.iteration1_candidate3.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow1_3 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow1_3.setPixmap(pixmap)
         arrow1_3.resize(50, 60)
@@ -100,7 +100,7 @@ class MainWindow(QMainWindow):
         self.iteration2_candidate1.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow2_1 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow2_1.setPixmap(pixmap)
         arrow2_1.resize(50, 60)
@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
         self.iteration2_candidate2.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow2_2 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow2_2.setPixmap(pixmap)
         arrow2_2.resize(50, 60)
@@ -130,7 +130,7 @@ class MainWindow(QMainWindow):
         self.iteration2_candidate3.resize(self.ref_size*0.7, self.ref_size*0.7)
 
         arrow2_3 = QLabel(self)
-        pixmap = QPixmap('imgs/arrow.png')
+        pixmap = QPixmap('../../imgs/arrow.png')
         pixmap = pixmap.scaledToWidth(50)
         arrow2_3.setPixmap(pixmap)
         arrow2_3.resize(50, 60)

@@ -1,6 +1,6 @@
 import torch
 import nltk
-from pytorch_pretrained_biggan import (BigGAN, one_hot_from_names, one_hot_from_int, truncated_noise_sample,
+from model.biggan import (BigGAN, one_hot_from_names, one_hot_from_int, truncated_noise_sample,
                                        save_as_images, display_in_terminal)
 from PIL import Image
 import time
