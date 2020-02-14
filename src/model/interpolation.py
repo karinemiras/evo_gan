@@ -3,37 +3,29 @@ import torch
 import numpy as np
 import copy
 from threading import Lock
-from model.image import process_image
+from model.images import process_image
 
 
 class Interpolation:
-    def __init__(self, interpolation_frames, n_children):
+
+    def __init__(self, interpolation_frames):
 
         self.interpolation_frames = interpolation_frames
-        self.child_interpolations = [[None]*self.interpolation_frames]*n_children
 
-        self.save_images = True
-        self.save_image_index = 0
-        self.save_image_folder = "../../imgs/interpolations/"
-
-    # TODO refactor
-    def interpolate(self, gan, individual1, individual2, child_index=None, batch_size=1):
-        noise_interpolation = np.linspace(individual1.noise_vector.squeeze(0), individual2.noise_vector.squeeze(0),
+    def interpolate(self, gan, parent, child, batch_size=1):
+        noise_interpolation = np.linspace(parent.noise_vector.squeeze(0), child.noise_vector.squeeze(0),
                                           num=self.interpolation_frames)
-        class_interpolation = np.linspace(individual1.class_vector.squeeze(0), individual2.class_vector.squeeze(0),
+        class_interpolation = np.linspace(parent.class_vector.squeeze(0), child.class_vector.squeeze(0),
                                           num=self.interpolation_frames)
 
-        specific_child = copy.deepcopy(self.child_interpolations[child_index])
-        for idx in range(0, len(noise_interpolation), batch_size):
+        child_interpolations = [None] * self.interpolation_frames
+        # not sure why having a batch size is necessary
+        for index in range(0, self.interpolation_frames, batch_size):
 
-            # TODO remove
-            with Lock():
+            #with Lock(): # TODO remove
+            noise_vectors = torch.from_numpy(noise_interpolation[index:index+batch_size])
+            class_vectors = torch.from_numpy(class_interpolation[index:index+batch_size])
 
-                noise_vectors = torch.from_numpy(noise_interpolation[idx:idx+batch_size])
-                class_vectors = torch.from_numpy(class_interpolation[idx:idx+batch_size])
+            child_interpolations[index:index+batch_size] = gan.get_model_images(noise_vectors, class_vectors)
 
-                tmp_interpolation = gan.get_model_images(noise_vectors, class_vectors).to('cpu').numpy()
-                specific_child[idx:idx+batch_size] = np.copy([process_image(interpolation) for interpolation in tmp_interpolation])
-
-        self.child_interpolations[child_index] = specific_child
-
+        return child_interpolations

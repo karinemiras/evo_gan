@@ -9,6 +9,7 @@ class Logger:
     template_filename = "template_log.json"
 
     def __init__(self):
+        self.generation_index = 0
         self.generations_data = []
 
     def _open_json(self, filename):
@@ -27,18 +28,22 @@ class Logger:
         else:
             self.generations_data = self._open_json(self.template_filename)
 
+        self.generation_index = len(self.generations_data['generations'])
+
     def write_log(self):
 
         with open(self.log_folder + self.regular_filename, 'w') as json_file:
             json.dump(self.generations_data, json_file)
 
-    def create_log(self, parent_filename, child_filename, morph_folder):
-        generation_index = len(self.generations_data["generations"])
-        generation_dictionary = {"generation_index": generation_index,
+    def create_log(self, parent_filename, child_filename, interpolation_filename):
+
+        generation_dictionary = {"generation_index": self.generation_index,
                                  "parent_filename": parent_filename,
                                  "child_filename": child_filename,
-                                 "morph_folder": morph_folder}
+                                 "interpolation_filename": interpolation_filename}
         self.generations_data['generations'].append(generation_dictionary)
+
+        self.generation_index += 1
 
 
 if __name__ == "__main__":

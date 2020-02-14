@@ -145,6 +145,7 @@ class Evolution():
                     tmp_interpolation = self.model(noise_vectors, class_vectors, self.truncation).to('cpu').numpy()
                     specific_child[idx:idx+self.batch_size] = np.copy([np.clip((interpolation.transpose((1,2,0)) + 1)/2., 0, 1) for interpolation in tmp_interpolation])
 
+        print(self.child_interpolations[0].shape)
 
         self.child_interpolations[child_index] = specific_child
                 # torch.cuda.empty_cache()
