@@ -8,162 +8,101 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import PyQt5.QtCore
 
+
+demo_folder = "../../demo/"
+arrow_filename = demo_folder + "arrow.png"
+candidate_configuration = 'border-radius: 10px; border-image: url({})'
+number_of_generations = 3
+number_of_candidate = 3
+visible_generations = number_of_generations - 1
+
+arrow_width = 50
+arrow_height = 60
+arrow_margin = 80
+
+window_width = 1000
+window_height = 900
+
+
 class UIWindow(QWidget):
     def __init__(self, parent=None):
         super(UIWindow, self).__init__(parent)
 
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        self.setGeometry(360, 50, 1000, 900)
-        self.setFixedSize(1000, 900)
+        self.setGeometry(360, 50, window_width, window_height)
+        self.setFixedSize(window_width, window_height)
         self.startUIWindow()
         p = self.palette()
         p.setColor(self.backgroundRole(), PyQt5.QtCore.Qt.white)
         self.setPalette(p)
 
-        self.ref_size = 220
+        self.parent_size = 220
 
         # main parents
+        self.main_parent_movies = [None] * number_of_generations
 
-        self.main1 = QMovie("../../imgs/iteration1_main.png")
-        self.main1.frameChanged.connect(self.repaint)
-        self.main1.setScaledSize(PyQt5.QtCore .QSize(self.ref_size, self.ref_size))
-        self.main1.start()
+        # Parents are gif's, except the first parent
+        filetype = "png"
 
-        self.main2 = QMovie("../../imgs/iteration2_main.gif")
-        self.main2.frameChanged.connect(self.repaint)
-        self.main2.setScaledSize(PyQt5.QtCore.QSize(self.ref_size, self.ref_size))
-        self.main2.start()
+        for index in range(number_of_generations):
+            filename = demo_folder + "iteration{}_main.{}".format(index + 1, filetype)
+            print(filename)
+            self.main_parent_movies[index] = QMovie(filename)
+            self.main_parent_movies[index].frameChanged.connect(self.repaint)
+            self.main_parent_movies[index].setScaledSize(PyQt5.QtCore .QSize(self.parent_size, self.parent_size))
+            self.main_parent_movies[index].start()
+            filetype = "gif"
 
-        self.main3 = QMovie("../../imgs/iteration4_main.gif")
-        self.main3.frameChanged.connect(self.repaint)
-        self.main3.setScaledSize(PyQt5.QtCore .QSize(self.ref_size, self.ref_size))
-        self.main3.start()
+        ######### Displaying the children candidates and sub arrows to the midline ############
+        # TODO remove candidate / child ambiguity
+        # I personaly like 'candidate' in the GUI setting, but for evolution 'child' could be more appropriate.
 
+        starting_x = 340
 
-        # candidate parents
-
-        ref_x = 340
+        ref_x = starting_x
         ref_y = 75
 
-        self.iteration1_candidate1 = QPushButton('', self)
-        self.iteration1_candidate1.setStyleSheet(' border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration1_candidate1.png'))
-        self.iteration1_candidate1.move(ref_x, ref_y)
-        self.iteration1_candidate1.resize(self.ref_size*0.7, self.ref_size*0.7)
+        candidate_size = self.parent_size * 0.7
 
-        arrow1_1 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow1_1.setPixmap(pixmap)
-        arrow1_1.resize(50, 60)
-        arrow1_1.move(ref_x+55, ref_y+self.ref_size*0.7)
+        self.interation_candidates = [[None] * number_of_candidate] * number_of_generations
 
-        ref_x = ref_x + self.ref_size*0.7 + 80
+        self.candidate_arrows = [[None] * number_of_candidate] * visible_generations
 
-        self.iteration1_candidate2 = QPushButton('', self)
-        self.iteration1_candidate2.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration1_candidate2.png'))
-        self.iteration1_candidate2.move(ref_x, ref_y)
-        self.iteration1_candidate2.resize(self.ref_size*0.7, self.ref_size*0.7)
+        for generation_index in range(number_of_generations):
 
-        arrow1_2 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow1_2.setPixmap(pixmap)
-        arrow1_2.resize(50, 60)
-        arrow1_2.move(ref_x+55, ref_y+self.ref_size*0.7)
+            arrow_y = ref_y + candidate_size
 
-        ref_x = ref_x + self.ref_size*0.7 + 80
+            for candidate_index in range(number_of_candidate):
 
-        self.iteration1_candidate3 = QPushButton('', self)
-        self.iteration1_candidate3.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration1_candidate3.png'))
-        self.iteration1_candidate3.move(ref_x, ref_y)
-        self.iteration1_candidate3.resize(self.ref_size*0.7, self.ref_size*0.7)
+                arrow_x = ref_x + 55
 
-        arrow1_3 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow1_3.setPixmap(pixmap)
-        arrow1_3.resize(50, 60)
-        arrow1_3.move(ref_x+55, ref_y+self.ref_size*0.7)
+                print(generation_index, candidate_index, ref_x, ref_y, arrow_x, arrow_y)
 
-        ref_x = 340
-        ref_y = ref_y + self.ref_size*0.7 + 80 + 65
+                self.interation_candidates[generation_index][candidate_index] = QPushButton('', self)
+                self.interation_candidates[generation_index][candidate_index].setStyleSheet(candidate_configuration
+                                                         .format(demo_folder + 'iteration{}_candidate{}.png'.format(generation_index + 1, candidate_index + 1)))
+                self.interation_candidates[generation_index][candidate_index].move(ref_x, ref_y)
+                self.interation_candidates[generation_index][candidate_index].resize(candidate_size, candidate_size)
 
-        self.iteration2_candidate1 = QPushButton('', self)
-        self.iteration2_candidate1.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration2_candidate1.png'))
-        self.iteration2_candidate1.move(ref_x, ref_y)
-        self.iteration2_candidate1.resize(self.ref_size*0.7, self.ref_size*0.7)
+                ref_x = ref_x + candidate_size + arrow_margin
 
-        arrow2_1 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow2_1.setPixmap(pixmap)
-        arrow2_1.resize(50, 60)
-        arrow2_1.move(ref_x+55, ref_y+self.ref_size*0.7)
+                if generation_index == visible_generations:
+                    # Last generation does not have candidate arrows
+                    continue
 
-        ref_x = ref_x + self.ref_size*0.7 + 80
+                self.candidate_arrows[generation_index][candidate_index] = QLabel(self)
+                pixmap = QPixmap(arrow_filename)
+                pixmap = pixmap.scaledToWidth(arrow_width)
+                self.candidate_arrows[generation_index][candidate_index].setPixmap(pixmap)
+                self.candidate_arrows[generation_index][candidate_index].resize(arrow_width, arrow_height)
+                self.candidate_arrows[generation_index][candidate_index].move(arrow_x, arrow_y)
 
-        self.iteration2_candidate2 = QPushButton('', self)
-        self.iteration2_candidate2.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration2_candidate2.png'))
-        self.iteration2_candidate2.move(ref_x, ref_y)
-        self.iteration2_candidate2.resize(self.ref_size*0.7, self.ref_size*0.7)
-
-        arrow2_2 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow2_2.setPixmap(pixmap)
-        arrow2_2.resize(50, 60)
-        arrow2_2.move(ref_x+55, ref_y+self.ref_size*0.7)
-
-        ref_x = ref_x + self.ref_size*0.7 + 80
-
-        self.iteration2_candidate3 = QPushButton('', self)
-        self.iteration2_candidate3.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration2_candidate3.png'))
-        self.iteration2_candidate3.move(ref_x, ref_y)
-        self.iteration2_candidate3.resize(self.ref_size*0.7, self.ref_size*0.7)
-
-        arrow2_3 = QLabel(self)
-        pixmap = QPixmap('../../imgs/arrow.png')
-        pixmap = pixmap.scaledToWidth(50)
-        arrow2_3.setPixmap(pixmap)
-        arrow2_3.resize(50, 60)
-        arrow2_3.move(ref_x+55, ref_y+self.ref_size*0.7)
-
-        ref_x = 340
-        ref_y = ref_y + self.ref_size*0.7 + 80 + 60
-
-        self.iteration3_candidate1 = QPushButton('', self)
-        self.iteration3_candidate1.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration3_candidate1.png'))
-        self.iteration3_candidate1.move(ref_x, ref_y)
-        self.iteration3_candidate1.resize(self.ref_size*0.7, self.ref_size*0.7)
-
-        ref_x = ref_x + self.ref_size*0.7 + 80
-
-        self.iteration3_candidate2 = QPushButton('', self)
-        self.iteration3_candidate2.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration3_candidate2.png'))
-        self.iteration3_candidate2.move(ref_x, ref_y)
-        self.iteration3_candidate2.resize(self.ref_size*0.7, self.ref_size*0.7)
-
-        ref_x = ref_x + self.ref_size*0.7 + 80
-
-        self.iteration3_candidate3 = QPushButton('', self)
-        self.iteration3_candidate3.setStyleSheet('border-radius: 10px; border-image: url({})'
-                                                 .format('imgs/iteration3_candidate3.png'))
-        self.iteration3_candidate3.move(ref_x, ref_y)
-        self.iteration3_candidate3.resize(self.ref_size*0.7, self.ref_size*0.7)
-
-
-
-
+            # Reset reference point
+            ref_x = starting_x
+            ref_y = ref_y + candidate_size + arrow_margin + arrow_height
 
         #button5.clicked.connect(self.on_click_button5)
 
@@ -177,50 +116,56 @@ class MainWindow(QMainWindow):
 
         ref_x = 40
         ref_y = 40
-        currentFrame = self.main1.currentPixmap()
-        frameRect = currentFrame.rect()
-        frameRect.moveCenter(self.rect().center())
-        if frameRect.intersects(event.rect()):
-            painter = QPainter(self)
-            painter.drawPixmap(ref_x, ref_y, currentFrame)
 
-        painter = QPainter()
-        painter.begin(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setPen(QPen(PyQt5.QtCore.Qt.red, 5))
+        #########################################################
+        parent_painters = [None] * number_of_generations
+        arrow_painters = [None] * visible_generations
 
-        painter.drawLine(ref_x+110, ref_y + self.ref_size+2, ref_x+110, ref_y + self.ref_size+75)
-        painter.drawLine(ref_x+90, ref_y + self.ref_size+2+60, ref_x+110, ref_y + self.ref_size+2+75)
-        painter.drawLine(ref_x+130, ref_y + self.ref_size+2+60, ref_x+110, ref_y + self.ref_size+2+75)
-        painter.drawLine(ref_x+110,  ref_y + self.ref_size+30, ref_x+110+800,  ref_y + self.ref_size+30)
+        arrowhead_height = 15
+        arrowhead_width = 20
+        # +2 for slight corrections of the arrow location
+        arrow_correction = 2
 
-        ref_y = ref_y + self.ref_size+80
-        currentFrame2 = self.main2.currentPixmap()
-        frameRect2 = currentFrame2.rect()
-        frameRect2.moveCenter(self.rect().center())
-        if frameRect2.intersects(event.rect()):
-            painter2 = QPainter(self)
-            painter2.drawPixmap(ref_x, ref_y, currentFrame2)
+        midline_width = 800
 
-        painter = QPainter()
-        painter.begin(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-        painter.setPen(QPen(PyQt5.QtCore.Qt.red, 5))
-        #QPen(PyQt5.QtGui.QColor(102, 85, 0), 5)
-        painter.setBrush(PyQt5.QtCore.Qt.white)
-        painter.drawLine(ref_x+110, ref_y + self.ref_size+2, ref_x+110, ref_y + self.ref_size+75)
-        painter.drawLine(ref_x+90, ref_y + self.ref_size+2+60, ref_x+110, ref_y + self.ref_size+2+75)
-        painter.drawLine(ref_x+130, ref_y + self.ref_size+2+60, ref_x+110, ref_y + self.ref_size+2+75)
-        painter.drawLine(ref_x + 110, ref_y + self.ref_size + 30, ref_x + 800 + 100, ref_y + self.ref_size + 30)
+        for generation_index in range(number_of_generations):
 
-        ref_y = ref_y + self.ref_size+80
-        currentFrame3 = self.main3.currentPixmap()
-        frameRect3 = currentFrame3.rect()
-        frameRect3.moveCenter(self.rect().center())
-        if frameRect3.intersects(event.rect()):
-            painter3 = QPainter(self)
-            painter3.drawPixmap(ref_x, ref_y, currentFrame3)
+            current_frame = self.main_parent_movies[generation_index].currentPixmap()
+            frameRect = current_frame.rect()
+            frameRect.moveCenter(self.rect().center())
 
+            if frameRect.intersects(event.rect()):
+                parent_painters[generation_index] = QPainter(self)
+                parent_painters[generation_index].drawPixmap(ref_x, ref_y, current_frame)
+
+            if generation_index == number_of_generations - 1:
+                # Last generation has a different visualization
+                break
+
+            # Setup brush
+            arrow_painters[generation_index] = QPainter()
+            arrow_painters[generation_index].begin(self)
+            arrow_painters[generation_index].setRenderHint(QPainter.Antialiasing)
+            arrow_painters[generation_index].setPen(QPen(PyQt5.QtCore.Qt.red, 5))
+
+            # Parent Directional arrow to the new generation
+
+            arrow_x = ref_x + 110
+
+            arrowhead_y_start = ref_y + self.parent_size + arrow_height + arrow_correction
+            arrow_head_y_end = arrowhead_y_start + arrowhead_height
+
+            arrow_painters[generation_index].drawLine(arrow_x, ref_y + self.parent_size + arrow_correction, arrow_x,
+                                                      arrow_head_y_end)
+
+            arrow_painters[generation_index].drawLine(arrow_x - arrowhead_width, arrowhead_y_start, arrow_x, arrow_head_y_end)
+            arrow_painters[generation_index].drawLine(arrow_x + arrowhead_width, arrowhead_y_start, arrow_x, arrow_head_y_end)
+
+            # Main branch connecting to the candidate arrow
+            arrow_y_midline = ref_y + self.parent_size + 30
+            arrow_painters[generation_index].drawLine(arrow_x, arrow_y_midline, arrow_x + midline_width, arrow_y_midline)
+
+            ref_y = ref_y + self.parent_size + arrow_margin
 
         painter = QPainter()
         painter.begin(self)
@@ -228,7 +173,9 @@ class MainWindow(QMainWindow):
 
         painter.drawRect(320, 645, 660, 200)
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     w = MainWindow()
+    w.show()
     sys.exit(app.exec_())
