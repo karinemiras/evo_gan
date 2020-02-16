@@ -8,10 +8,19 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 import PyQt5.QtCore
 
+is_demo = False
 
-demo_folder = "../../demo/"
-arrow_filename = demo_folder + "arrow.png"
+if is_demo:
+    image_folder = "../../demo/"
+else:
+    image_folder = "../../imgs/"
+
+resources_folder = "../../resources/"
+
+arrow_filename = resources_folder + "arrow.png"
+
 candidate_configuration = 'border-radius: 10px; border-image: url({})'
+
 number_of_generations = 3
 number_of_candidate = 3
 visible_generations = number_of_generations - 1
@@ -45,16 +54,17 @@ class MainWindow(QMainWindow):
         self.main_parent_movies = [None] * number_of_generations
 
         # Parents are gif's, except the first parent
-        filetype = "png"
 
         for index in range(number_of_generations):
-            filename = demo_folder + "iteration{}_main.{}".format(index + 1, filetype)
-            print(filename)
+            if index == 0:
+                filename = image_folder + "parent/iteration{}_main.png".format(index + 1)
+            else:
+                filename = image_folder + "interpolations/iteration{}_main.gif".format(index + 1)
+            print("parent: ", filename)
             self.main_parent_movies[index] = QMovie(filename)
             self.main_parent_movies[index].frameChanged.connect(self.repaint)
             self.main_parent_movies[index].setScaledSize(PyQt5.QtCore .QSize(self.parent_size, self.parent_size))
             self.main_parent_movies[index].start()
-            filetype = "gif"
 
         ######### Displaying the children candidates and sub arrows to the midline ############
         # TODO remove candidate / child ambiguity
@@ -79,11 +89,9 @@ class MainWindow(QMainWindow):
 
                 arrow_x = ref_x + 55
 
-                print(generation_index, candidate_index, ref_x, ref_y, arrow_x, arrow_y)
-
                 self.interation_candidates[generation_index][candidate_index] = QPushButton('', self)
                 self.interation_candidates[generation_index][candidate_index].setStyleSheet(candidate_configuration
-                                                         .format(demo_folder + 'iteration{}_candidate{}.png'.format(generation_index + 1, candidate_index + 1)))
+                                                         .format(image_folder + 'children/iteration{}_candidate{}.png'.format(generation_index + 1, candidate_index + 1)))
                 self.interation_candidates[generation_index][candidate_index].move(ref_x, ref_y)
                 self.interation_candidates[generation_index][candidate_index].resize(candidate_size, candidate_size)
 

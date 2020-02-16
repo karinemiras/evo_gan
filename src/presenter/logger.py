@@ -1,6 +1,8 @@
 import json
 from typing import List
 
+from model.individual import Individual
+
 
 class Logger:
 
@@ -33,28 +35,27 @@ class Logger:
     def write_log(self):
 
         with open(self.log_folder + self.regular_filename, 'w') as json_file:
-            json.dump(self.generations_data, json_file)
+            # Indent makes it more readable for humans... TODO: do not expand the arrays
+            json.dump(self.generations_data, json_file, indent=4)
 
-    def create_log(self, parent_filename, child_filename, interpolation_filename):
+    def create_log(self, parent: Individual):
 
         generation_dictionary = {"generation_index": self.generation_index,
-                                 "parent_filename": parent_filename,
-                                 "child_filename": child_filename,
-                                 "interpolation_filename": interpolation_filename}
+                                 "parent_class": parent.class_vector.tolist(),
+                                 "parent_noise": parent.noise_vector.tolist()}
         self.generations_data['generations'].append(generation_dictionary)
 
         self.generation_index += 1
 
 
 if __name__ == "__main__":
+    from presenter.helper import extract_parent_from_logger
     logger = Logger()
 
     logger.open_log(template=True)
-
+    parent = extract_parent_from_logger(logger)
+    print(parent)
     generation_index = len(logger.generations_data["generations"])
-    logger.create_log("parent_" + str(generation_index),
-                    "child" + str(generation_index), "morph_" + str(generation_index))
-
+    logger.create_log(parent=Individual())
     logger.write_log()
 
-    print("generations", logger.generations_data)

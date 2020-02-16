@@ -8,14 +8,10 @@ logger: Logger = None
 
 def request_child(child_index: int):
     global evolution, logger
+    print(logger.generation_index)
+    evolution.process_generation(generation_index=logger.generation_index, child_index=child_index)
 
-    parent_filename, child_filename, interpolation_filename = \
-        evolution.process_generation(generation_index=logger.generation_index, child_index=child_index)
-
-    logger.create_log(parent_filename=parent_filename, child_filename=child_filename,
-                      interpolation_filename=interpolation_filename)
-
-    return parent_filename, child_filename, interpolation_filename
+    logger.create_log(parent=evolution.parent)
 
 
 def main():
@@ -27,17 +23,15 @@ def main():
 
     n_children = 3
     batch_size = 5
-    interpolation_frames = 3
+    interpolation_frames = 60
 
-    evolution = Evolution(interpolation_frames, n_children, batch_size=batch_size)
+    evolution = Evolution(interpolation_frames, n_children, batch_size, logger)
 
-    evolution.initialize(logger.generation_index)
-
+    request_child(2)
+    request_child(1)
     request_child(0)
 
-    #logger.write_log()
-
-
+    logger.write_log()
 
 
 if __name__=="__main__":

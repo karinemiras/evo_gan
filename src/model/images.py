@@ -18,7 +18,7 @@ def save_image(filename, image):
     return path
 
 
-def save_interpolations(images, generation):
-    path = interpolation_path + "generation_{}.gif".format(generation)
+def save_interpolations(images, generation_index):
+    path = interpolation_path + "iteration{}_main.gif".format(generation_index + 1)
     imageio.mimsave(path, images)
     return path

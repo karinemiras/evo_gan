@@ -16,14 +16,20 @@ class Individual:
         self.vector_threshold = vector_threshold
         self.batch_size = 1
 
+        self.image = None
+
         self.class_vector = None
         self.noise_vector = None
 
-        self._initialize()
+        self.initialize()
 
-    def _initialize(self):
-        self._create_random_class_vector()
-        self._create_random_noise_vector()
+    def initialize(self, log_dict=None):
+        if log_dict is None:
+            self._create_random_class_vector()
+            self._create_random_noise_vector()
+        else:
+            self.class_vector = np.array(log_dict["class"]).astype('float32')
+            self.noise_vector = np.array(log_dict["noise"]).astype('float32')
 
     def _create_random_class_vector(self):
         self.class_vector = self._insert_random_class_vectors()

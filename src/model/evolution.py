@@ -6,23 +6,30 @@ from model.images import save_image, save_interpolations
 from model.interpolation import Interpolation
 from model.gan import GAN
 
+from presenter.logger import Logger
+from presenter.helper import extract_parent_from_logger
+
 
 class Evolution:
 
-    def __init__(self, interpolation_frames, n_children, batch_size):
+    def __init__(self, interpolation_frames, n_children, batch_size, logger: Logger = None):
         self.batch_size = batch_size
 
         self.gan = GAN()
         self.interpolation = Interpolation(interpolation_frames)
 
-        self.parent = Individual()
-
+        # TODO who should have the generation index under its control 'Evolution' or 'Logger'
+        generation_index = 0
+        if logger is None:
+            self.parent = Individual()
+            self._generate_parent_image(self.generation_index, generate=True)
+        else:
+            generation_index = logger.generation_index
+            self.parent = extract_parent_from_logger(logger)
 
         self.n_children = n_children
         self.children = [Individual] * self.n_children
 
-    def initialize(self, generation_index):
-        self.save_parent(generation_index)
         self._make_children(generation_index)
 
     def _make_children(self, generation_index):
@@ -31,23 +38,29 @@ class Evolution:
 
             self.children[child_index].mutate()
 
-            self.save_child(generation_index, child_index)
+            self._generate_child_image(generation_index, child_index)
 
         # TODO: Why is this one not mutated?
         #self.children[self.n_children - 1] = Individual(batch_size=self.batch_size)
         #self.save_individual("children/child_{}.png".format(self.n_children - 1), self.children[self.n_children - 1])
 
-    def save_parent(self, generation_index):
-        image = self.gan.get_model_image(self.parent)
-        filename = "parent/parent_{}.png".format(generation_index)
-        save_image(filename, image)
+    def _save_parent_image(self, generation_index, generate=False):
+        if generate:
+            self.parent.image = self.gan.get_model_image(self.parent)
+
+        filename = "parent/iteration{}_main.png".format(generation_index + 1)
+        print("save parent image", filename, generation_index)
+        save_image(filename, self.parent.image)
+
         return filename
 
-    def save_child(self, generation_index, child_index):
-        image = self.gan.get_model_image(self.children[child_index])
+    def _generate_child_image(self, generation_index, child_index, save=True):
+        self.children[child_index].image = self.gan.get_model_image(self.children[child_index])
 
-        filename = "children/child_{}_{}.png".format(generation_index, child_index)
-        save_image(filename, image)
+        filename = "children/iteration{}_candidate{}.png".format(generation_index, child_index + 1)
+
+        if save:
+            save_image(filename, self.children[child_index].image)
 
     # THREAD
     def _interpolate_child(self, generation_index, child_index):
@@ -59,15 +72,13 @@ class Evolution:
 
     def process_generation(self, generation_index, child_index):
 
-        parent_filename = "parent_{}.png".format(generation_index)
-        child_filename = "child_{}_{}.png".format(generation_index, child_index)
-        interpolation_filename = self._interpolate_child(generation_index, child_index)
+        _ = self._interpolate_child(generation_index, child_index)
 
         self.parent = copy.deepcopy(self.children[child_index])
+
+        self._save_parent_image(generation_index)
+
         self._make_children(generation_index + 1)
-
-        return parent_filename, child_filename, interpolation_filename
-
 
 
 def main():
@@ -75,7 +86,6 @@ def main():
     batch_size = 1
     interpolation_frames = 10 #60
     evolution = Evolution(interpolation_frames, n_children, batch_size=batch_size)
-    evolution.initialize(0)
     evolution.process_generation(0, 1)
 
 if __name__=="__main__":

@@ -1,16 +1,5 @@
 {
     "generations": [
-        {
-            "generation_index": 0,
-            "parent_filename": "parent_0",
-            "child_filename": "child_0",
-            "interpolation_filename": "morph_0"
-        },
-        {
-            "generation_index": 1,
-            "parent_filename": "parent_1",
-            "child_filename": "child_1",
-            "interpolation_filename": "morph_1"
-        }
+
     ]
 }
