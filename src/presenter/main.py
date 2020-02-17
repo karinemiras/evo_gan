@@ -1,18 +1,27 @@
+import sys
+
+from PyQt5.QtWidgets import QApplication
 
 from model.evolution import Evolution
 from presenter.logger import Logger
+from view.evolution_gui import EvolutionGUI
 
 
 evolution: Evolution = None
 logger: Logger = None
 
-def request_child(child_index: int):
+
+def request_candidate(child_index: int):
     global evolution, logger
-    print(logger.generation_index)
-    evolution.process_generation(generation_index=logger.generation_index, child_index=child_index)
+
+    evolution.process_generation(child_index=child_index)
 
     logger.create_log(parent=evolution.parent)
+    logger.write_log()
 
+    evolution.generation.index += 1
+
+#TODO Make dataset offline available.
 
 def main():
     global evolution, logger
@@ -23,15 +32,18 @@ def main():
 
     n_children = 3
     batch_size = 5
-    interpolation_frames = 60
+    interpolation_frames = 5
 
     evolution = Evolution(interpolation_frames, n_children, batch_size, logger)
 
-    request_child(2)
-    request_child(1)
-    request_child(0)
+    request_candidate(0)
+    request_candidate(1)
 
-    logger.write_log()
+    app = QApplication(sys.argv)
+    w = EvolutionGUI(request_candidate)
+    w.show()
+
+    sys.exit(app.exec_())
 
 
 if __name__=="__main__":

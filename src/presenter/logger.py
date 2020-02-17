@@ -3,6 +3,8 @@ from typing import List
 
 from model.individual import Individual
 
+from presenter.generation import Generation
+
 
 class Logger:
 
@@ -11,7 +13,7 @@ class Logger:
     template_filename = "template_log.json"
 
     def __init__(self):
-        self.generation_index = 0
+        self.generation = Generation.getInstance()
         self.generations_data = []
 
     def _open_json(self, filename):
@@ -30,7 +32,7 @@ class Logger:
         else:
             self.generations_data = self._open_json(self.template_filename)
 
-        self.generation_index = len(self.generations_data['generations'])
+        self.generation.index = len(self.generations_data['generations'])
 
     def write_log(self):
 
@@ -40,12 +42,10 @@ class Logger:
 
     def create_log(self, parent: Individual):
 
-        generation_dictionary = {"generation_index": self.generation_index,
+        generation_dictionary = {"generation_index": self.generation.index,
                                  "parent_class": parent.class_vector.tolist(),
                                  "parent_noise": parent.noise_vector.tolist()}
         self.generations_data['generations'].append(generation_dictionary)
-
-        self.generation_index += 1
 
 
 if __name__ == "__main__":
@@ -54,8 +54,7 @@ if __name__ == "__main__":
 
     logger.open_log(template=True)
     parent = extract_parent_from_logger(logger)
-    print(parent)
-    generation_index = len(logger.generations_data["generations"])
+    print(parent, Generation.getInstance().index)
     logger.create_log(parent=Individual())
     logger.write_log()
 

@@ -29,4 +29,4 @@ class GAN:
 
         with torch.no_grad():
             images = self.model(noise_vectors, class_vectors, self.truncation).to('cpu').numpy()
-            return [process_image(image) for image in images]
+            return [process_image(image, False) for image in images]
