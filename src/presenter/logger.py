@@ -40,11 +40,12 @@ class Logger:
             # Indent makes it more readable for humans... TODO: do not expand the arrays
             json.dump(self.generations_data, json_file, indent=4)
 
-    def create_log(self, parent: Individual):
+    def create_log(self, parent: Individual, child_index: int):
 
         generation_dictionary = {"generation_index": self.generation.index,
                                  "parent_class": parent.class_vector.tolist(),
-                                 "parent_noise": parent.noise_vector.tolist()}
+                                 "parent_noise": parent.noise_vector.tolist(),
+                                 "child_index": child_index}
         self.generations_data['generations'].append(generation_dictionary)
 
 
@@ -55,6 +56,6 @@ if __name__ == "__main__":
     logger.open_log(template=True)
     parent = extract_parent_from_logger(logger)
     print(parent, Generation.getInstance().index)
-    logger.create_log(parent=Individual())
+    logger.create_log(parent=Individual(), child_index=0)
     logger.write_log()
 

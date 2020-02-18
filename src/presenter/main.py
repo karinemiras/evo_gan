@@ -16,7 +16,7 @@ def request_candidate(child_index: int):
 
     evolution.process_generation(child_index=child_index)
 
-    logger.create_log(parent=evolution.parent)
+    logger.create_log(parent=evolution.parent, child_index=child_index)
     logger.write_log()
 
     evolution.generation.index += 1

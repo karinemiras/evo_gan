@@ -14,9 +14,6 @@ from functools import partial
 from presenter.generation import Generation
 
 
-def candidate_choice(candidate_index):
-    print("Chosen", candidate_index)
-
 
 class UIWindow(QWidget):
     def __init__(self, parent=None):
@@ -24,7 +21,7 @@ class UIWindow(QWidget):
 
 
 class EvolutionGUI(QMainWindow):
-    def __init__(self, request_candidate, parent=None, is_demo=False):
+    def __init__(self, request_candidate=None, parent=None, is_demo=False):
         super(EvolutionGUI, self).__init__(parent)
 
         self.generation = Generation.getInstance()
@@ -59,8 +56,10 @@ class EvolutionGUI(QMainWindow):
         p.setColor(self.backgroundRole(), PyQt5.QtCore.Qt.white)
         self.setPalette(p)
 
-
-        self.request_candidate = request_candidate
+        if request_candidate is None:
+            self.request_candidate = self.candidate_choice
+        else:
+            self.request_candidate = request_candidate
 
         self.parent_size = 220
 
@@ -72,7 +71,11 @@ class EvolutionGUI(QMainWindow):
         self.update()
         #button5.clicked.connect(self.on_click_button5)
 
-        self.show()
+
+
+    def candidate_choice(self, candidate_index):
+        self.generation.index += 1
+        print("Chosen", candidate_index)
 
     def update(self):
         # Parents are gif's, except the first parent
@@ -83,8 +86,10 @@ class EvolutionGUI(QMainWindow):
             path = self.image_folder + "interpolations/iteration{}_main.gif".format(generation_index)
             if not os.path.exists(path):
                 path = self.image_folder + "parent/iteration{}_main.png".format(generation_index)
+                if not os.path.exists(path):
+                    path = self.resource_folder + "frame.jpg"
 
-            print("parent", self.generation.index, iteration_index, generation_index, path)
+            print("parent", iteration_index, generation_index, path)
             self.main_parent_movies[iteration_index] = QMovie(path)
 
             self.main_parent_movies[iteration_index].frameChanged.connect(self.repaint)
@@ -105,6 +110,7 @@ class EvolutionGUI(QMainWindow):
         self.interation_candidates = [[None] * self.number_of_candidate] * self.number_of_interations
         self.candidate_arrows = [[None] * self.number_of_candidate] * self.visible_interations
 
+
         for iteration_index, generation_index in enumerate(
                 range(max(0, self.generation.index - self.number_of_interations + 1), self.generation.index + 1)):
 
@@ -114,10 +120,11 @@ class EvolutionGUI(QMainWindow):
 
                 arrow_x = ref_x + 55
 
-                print("candidate", self.generation.index, iteration_index, generation_index, candidate_index, arrow_x, arrow_y)
+                print("candidate",iteration_index, generation_index, candidate_index, arrow_x, arrow_y)
 
                 path = self.image_folder + 'children/iteration{}_candidate{}.png'.format(generation_index,
-                                                                                         candidate_index)
+                                                                                     candidate_index)
+                print(path)
                 """
                 self.interation_candidates[iteration_index][candidate_index] = QPushButton(str(generation_index) + "_" + str(candidate_index), self)
                 self.interation_candidates[iteration_index][candidate_index].setStyleSheet(
@@ -127,12 +134,13 @@ class EvolutionGUI(QMainWindow):
                 self.interation_candidates[iteration_index][candidate_index].resize(candidate_size, candidate_size)
                 """
                 if iteration_index != self.visible_interations:
-
+                    multiplier = 1 # self.generation.index
+                    print("repaint candidates")
                     self.interation_candidates[iteration_index][candidate_index] = QLabel(self)
                     pixmap = QPixmap(path).scaledToWidth(candidate_size)
                     self.interation_candidates[iteration_index][candidate_index].setPixmap(pixmap)
-                    self.interation_candidates[iteration_index][candidate_index].resize(candidate_size, candidate_size)
-                    self.interation_candidates[iteration_index][candidate_index].move(ref_x, ref_y)
+                    self.interation_candidates[iteration_index][candidate_index].resize(multiplier*candidate_size, multiplier*candidate_size)
+                    self.interation_candidates[iteration_index][candidate_index].move(multiplier*ref_x, multiplier*ref_y)
 
                     ref_x = ref_x + candidate_size + self.arrow_margin
 
@@ -152,7 +160,6 @@ class EvolutionGUI(QMainWindow):
                     self.interation_candidates[iteration_index][candidate_index].clicked.connect(
                         partial(self.request_candidate, candidate_index))
                     ref_x = ref_x + candidate_size + self.arrow_margin
-                    print("pushbutton")
                     continue
 
                 """
@@ -184,12 +191,10 @@ class EvolutionGUI(QMainWindow):
                 self.candidate_arrows[iteration_index][candidate_index].resize(self.arrow_width, self.arrow_height)
                 self.candidate_arrows[iteration_index][candidate_index].move(arrow_x, arrow_y)
 
-                print("arrow")
-
             # Reset reference point
             ref_x = starting_x
             ref_y = ref_y + candidate_size + self.arrow_margin + self.arrow_height
-            print("done update")
+
 
     def startUIWindow(self):
         self.Window = UIWindow(self)
@@ -198,7 +203,6 @@ class EvolutionGUI(QMainWindow):
     def paintEvent(self, event):
 
         if self.old_generation is not self.generation.index:
-            print("new update")
             self.old_generation = self.generation.index
             self.update()
 
@@ -217,7 +221,6 @@ class EvolutionGUI(QMainWindow):
         midline_width = 800
 
         for generation_index in range(self.number_of_interations):
-            print(self.main_parent_movies[generation_index])
             current_frame = self.main_parent_movies[generation_index].currentPixmap()
             frameRect = current_frame.rect()
             frameRect.moveCenter(self.rect().center())
@@ -228,7 +231,6 @@ class EvolutionGUI(QMainWindow):
 
             if generation_index == self.number_of_interations - 1:
                 # Last generation has a different visualization
-                print("exit")
                 break
 
             # Setup brush
@@ -240,7 +242,6 @@ class EvolutionGUI(QMainWindow):
             # Parent Directional arrow to the new generation
 
             arrow_x = ref_x + 110
-            print("arrow")
             arrowhead_y_start = ref_y + self.parent_size + self.arrow_height + arrow_correction
             arrow_head_y_end = arrowhead_y_start + arrowhead_height
 
@@ -261,11 +262,10 @@ class EvolutionGUI(QMainWindow):
         painter.setPen(QPen(PyQt5.QtCore.Qt.green, 5, PyQt5.QtCore.Qt.DotLine))
 
         painter.drawRect(320, 645, 660, 200)
-        print("end pain event")
 
 if __name__ == '__main__':
     is_demo = True
     app = QApplication(sys.argv)
-    w = EvolutionGUI(candidate_choice, is_demo=True)
+    w = EvolutionGUI(None, is_demo=True)
     w.show()
     sys.exit(app.exec_())

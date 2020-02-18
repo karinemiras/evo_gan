@@ -1,3 +1,8 @@
 
 
 .idea
+imgs/parent/*
+imgs/interpolations/*
+imgs/children/*
+logs/generation_log.json
+*.pyc
