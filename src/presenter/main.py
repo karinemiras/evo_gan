@@ -21,7 +21,6 @@ def request_candidate(child_index: int):
 
     evolution.generation.index += 1
 
-#TODO Make dataset offline available.
 
 def main():
     global evolution, logger
@@ -34,7 +33,9 @@ def main():
     batch_size = 5
     interpolation_frames = 5
 
-    evolution = Evolution(interpolation_frames, n_children, batch_size, logger)
+
+
+    evolution = Evolution(interpolation_frames, n_children, batch_size, resolution= 128, logger=logger)
 
     request_candidate(0)
     request_candidate(1)

@@ -13,10 +13,11 @@ from presenter.generation import Generation
 
 class Evolution:
 
-    def __init__(self, interpolation_frames, n_children, batch_size, logger: Logger = None):
+    def __init__(self, interpolation_frames, n_children, batch_size, resolution=128, logger: Logger = None):
         self.batch_size = batch_size
 
-        self.gan = GAN()
+        self.gan = GAN(resolution)
+
         self.interpolation = Interpolation(interpolation_frames)
 
         self.generation = Generation.getInstance()
@@ -84,8 +85,9 @@ class Evolution:
 def main():
     n_children = 3
     batch_size = 1
-    interpolation_frames = 2 #60
-    evolution = Evolution(interpolation_frames, n_children, batch_size=batch_size)
+    interpolation_frames = 10 #60
+    evolution = Evolution(interpolation_frames, n_children, resolution=128, batch_size=batch_size)
+
     evolution.process_generation(1)
 
 if __name__=="__main__":

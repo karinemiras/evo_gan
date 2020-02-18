@@ -42,6 +42,7 @@ def url_to_filename(url, etag=None):
     If `etag` is specified, append its hash to the url's, delimited
     by a period.
     """
+    """
     url_bytes = url.encode('utf-8')
     url_hash = sha256(url_bytes)
     filename = url_hash.hexdigest()
@@ -50,8 +51,8 @@ def url_to_filename(url, etag=None):
         etag_bytes = etag.encode('utf-8')
         etag_hash = sha256(etag_bytes)
         filename += '.' + etag_hash.hexdigest()
-
-    return filename
+    """
+    return url + etag
 
 
 def filename_to_url(filename, cache_dir=None):
@@ -94,20 +95,22 @@ def cached_path(url_or_filename, cache_dir=None):
     if sys.version_info[0] == 3 and isinstance(cache_dir, Path):
         cache_dir = str(cache_dir)
 
-    parsed = urlparse(url_or_filename)
-
-    if parsed.scheme in ('http', 'https', 's3'):
-        # URL, so get it from the cache (downloading if necessary)
-        return get_from_cache(url_or_filename, cache_dir)
-    elif os.path.exists(url_or_filename):
+    if os.path.exists(cache_dir + url_or_filename):
         # File, and it exists.
-        return url_or_filename
-    elif parsed.scheme == '':
-        # File, but it doesn't exist.
-        raise EnvironmentError("file {} not found".format(url_or_filename))
+        return cache_dir + url_or_filename
     else:
-        # Something unknown
-        raise ValueError("unable to parse {} as a URL or as a local path".format(url_or_filename))
+        url_or_filename = "https://s3.amazonaws.com/models.huggingface.co/biggan/" + url_or_filename
+        parsed = urlparse(url_or_filename)
+        if parsed.scheme in ('http', 'https', 's3'):
+            # URL, so get it from the cache (downloading if necessary)
+            return get_from_cache(url_or_filename, cache_dir)
+
+        if parsed.scheme == '':
+            # File, but it doesn't exist.
+            raise EnvironmentError("file {} not found".format(url_or_filename))
+        else:
+            # Something unknown
+            raise ValueError("unable to parse {} as a URL or as a local path".format(url_or_filename))
 
 
 def split_s3_path(url):
@@ -183,19 +186,21 @@ def get_from_cache(url, cache_dir=None):
 
     if not os.path.exists(cache_dir):
         os.makedirs(cache_dir)
-
+    """
     # Get eTag to add to filename, if it exists.
     if url.startswith("s3://"):
         etag = s3_etag(url)
+        print("starts with s3://", url)
     else:
         response = requests.head(url, allow_redirects=True)
         if response.status_code != 200:
             raise IOError("HEAD request failed for url {} with status code {}"
                           .format(url, response.status_code))
         etag = response.headers.get("ETag")
-
-    filename = url_to_filename(url, etag)
-
+        print("response", response.headers)
+    print("etag:", etag)
+    """
+    filename = url.split("/")[-1]
     # get cache path to put the file
     cache_path = os.path.join(cache_dir, filename)
 
@@ -220,11 +225,13 @@ def get_from_cache(url, cache_dir=None):
             with open(cache_path, 'wb') as cache_file:
                 shutil.copyfileobj(temp_file, cache_file)
 
+            """
             logger.info("creating metadata file for %s", cache_path)
-            meta = {'url': url, 'etag': etag}
+            meta = {'url': url}
             meta_path = cache_path + '.json'
             with open(meta_path, 'w', encoding="utf-8") as meta_file:
                 json.dump(meta, meta_file)
+            """
 
             logger.info("removing temp file %s", temp_file.name)
 

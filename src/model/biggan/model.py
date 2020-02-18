@@ -27,15 +27,15 @@ from .file_utils import cached_path
 logger = logging.getLogger(__name__)
 
 PRETRAINED_MODEL_ARCHIVE_MAP = {
-    'biggan-deep-128': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-128-pytorch_model.bin",
-    'biggan-deep-256': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-256-pytorch_model.bin",
-    'biggan-deep-512': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-512-pytorch_model.bin",
+    'biggan-deep-128': "biggan-deep-128-pytorch_model.bin",
+    'biggan-deep-256': "biggan-deep-256-pytorch_model.bin",
+    'biggan-deep-512': "biggan-deep-512-pytorch_model.bin",
 }
 
 PRETRAINED_CONFIG_ARCHIVE_MAP = {
-    'biggan-deep-128': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-128-config.json",
-    'biggan-deep-256': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-256-config.json",
-    'biggan-deep-512': "https://s3.amazonaws.com/models.huggingface.co/biggan/biggan-deep-512-config.json",
+    'biggan-deep-128': "biggan-deep-128-config.json",
+    'biggan-deep-256': "biggan-deep-256-config.json",
+    'biggan-deep-512': "biggan-deep-512-config.json",
 }
 
 WEIGHTS_NAME = 'pytorch_model.bin'
@@ -258,7 +258,6 @@ class BigGAN(nn.Module):
         else:
             model_file = os.path.join(pretrained_model_name_or_path, WEIGHTS_NAME)
             config_file = os.path.join(pretrained_model_name_or_path, CONFIG_NAME)
-
         try:
             resolved_model_file = cached_path(model_file, cache_dir=cache_dir)
             resolved_config_file = cached_path(config_file, cache_dir=cache_dir)
@@ -267,6 +266,8 @@ class BigGAN(nn.Module):
                          "a {} file and a {} file or a model name in {}".format(
                          WEIGHTS_NAME, CONFIG_NAME, PRETRAINED_MODEL_ARCHIVE_MAP.keys()))
             raise
+
+        print(resolved_config_file, resolved_model_file)
 
         logger.info("loading model {} from cache at {}".format(pretrained_model_name_or_path, resolved_model_file))
 

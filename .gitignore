@@ -1,8 +1,10 @@
 
 
 .idea
-imgs/parent/*
-imgs/interpolations/*
-imgs/children/*
+imgs/parent/
+imgs/interpolations/
+imgs/children/
+biggan/
 logs/generation_log.json
 *.pyc
+
