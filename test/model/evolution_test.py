@@ -1,8 +1,7 @@
-import copy
 import numpy as np
 import unittest
 
-from model.evolution import Evolution
+from presenter.evolution import Evolution
 from model.individual import Individual
 
 

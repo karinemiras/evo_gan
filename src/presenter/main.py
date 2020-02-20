@@ -2,7 +2,7 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from model.evolution import Evolution
+from presenter.evolution import Evolution
 from presenter.logger import Logger
 from view.evolution_gui import EvolutionGUI
 
@@ -33,17 +33,13 @@ def main():
     batch_size = 5
     interpolation_frames = 5
 
-
-
-    evolution = Evolution(interpolation_frames, n_children, batch_size, resolution= 128, logger=logger)
+    evolution = Evolution(interpolation_frames, n_children, batch_size, resolution=128, logger=logger)
 
     request_candidate(0)
     request_candidate(1)
 
     app = QApplication(sys.argv)
-    w = EvolutionGUI(request_candidate)
-    w.show()
-
+    w = EvolutionGUI()
     sys.exit(app.exec_())
 
 

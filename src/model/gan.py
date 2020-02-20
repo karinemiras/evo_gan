@@ -9,7 +9,7 @@ class GAN:
 
     root_dir = os.path.dirname(os.path.abspath(__file__))
 
-    def __init__(self, resolution=128, truncation=0.4):
+    def __init__(self, resolution=128, truncation=0.9):
         self.resolution = resolution
 
         self.truncation = truncation

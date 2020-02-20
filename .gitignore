@@ -8,3 +8,6 @@ biggan/
 logs/generation_log.json
 *.pyc
 
+*.png
+*.png
+*.pyc
