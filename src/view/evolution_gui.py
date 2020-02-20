@@ -17,6 +17,7 @@ from functools import partial
 from presenter.evolution import Evolution
 
 from presenter.generation import Generation
+from view.QMovieLabel import QMovieLabel
 
 
 class EvolutionGUI(QMainWindow):
@@ -41,6 +42,7 @@ class EvolutionGUI(QMainWindow):
 
         self.parent_image_path = "../../imgs/parent/iteration{}_main.png"
         self.candidate_image_path = "../../imgs/children/iteration{}_candidate{}.png"
+        self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
 
         self.candidate_box = QGroupBox()
         self.candidate_layout = QHBoxLayout()
@@ -60,6 +62,11 @@ class EvolutionGUI(QMainWindow):
         self.main_layout.addWidget(self.candidate_box)
         self.main_layout.addWidget(self.parent)
 
+        self.animation = QMovieLabel('', self)
+        self.animation.adjustSize()
+        self.animation.show()
+        self.main_layout.addWidget(self.animation)
+
         self.widget = QWidget()
         self.widget.setLayout(self.main_layout)
 
@@ -71,7 +78,6 @@ class EvolutionGUI(QMainWindow):
         if index is not None:
             self.evolution.process_generation(index)
             self.generation.index += 1
-        print(index, self.generation.index)
 
         parent_path = self.parent_image_path.format(self.generation.index)
         parent_image = QPixmap(parent_path)
@@ -81,7 +87,9 @@ class EvolutionGUI(QMainWindow):
             candidate_path = self.candidate_image_path.format(self.generation.index, child_index)
             self.candidate_buttons[child_index].setIcon(QtGui.QIcon(candidate_path))
 
-
+        self.animation.initialize(self.animation_image_path.format(self.generation.index))
+        self.animation.adjustSize()
+        self.animation.show()
 
 
 if __name__ == '__main__':

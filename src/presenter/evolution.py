@@ -1,5 +1,7 @@
 import time
 import copy
+import numpy as np
+import random
 
 from model.individual import Individual
 from model.images import save_image, save_interpolations
@@ -37,16 +39,19 @@ class Evolution:
         self._make_children(self.generation.index)
 
     def _make_children(self, generation_index):
-        for child_index in range(self.n_children):
+        last_child_index = self.n_children - 1
+
+        for child_index in range(last_child_index):
             self.children[child_index] = copy.deepcopy(self.parent)
 
             self.children[child_index].mutate()
-
             self._generate_child_image(generation_index, child_index)
 
-        # TODO: Why is this one not mutated?
-        #self.children[self.n_children - 1] = Individual(batch_size=self.batch_size)
-        #self.save_individual("children/child_{}.png".format(self.n_children - 1), self.children[self.n_children - 1])
+        # Add a random child to the candidate pool
+        self.children[last_child_index] = Individual()
+        self._generate_child_image(generation_index, last_child_index)
+
+        #random.shuffle(self.children)
 
     def _save_parent_image(self, generation_index, generate=False):
         if generate:

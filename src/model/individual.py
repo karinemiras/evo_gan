@@ -15,6 +15,7 @@ class Individual:
         # Sigma should be between 0 and 1
         self.vector_threshold = vector_threshold
         self.batch_size = 1
+        self.max_classes = 5
 
         self.image = None
 
@@ -79,6 +80,20 @@ class Individual:
             random_classes = np.random.randint(0, self.number_of_classes, size=(number_of_random_classes, ))
             class_vector[index, random_classes] = self.vector_threshold + \
                                                      (1 - self.vector_threshold) * np.random.rand(number_of_random_classes)
+
+        """
+        # TODO allow for batch size
+        nonzero_values = np.flatnonzero(class_vector[0])
+        np.sort(nonzero_values)
+
+        nonzero_index = min(len(nonzero_values), self.max_classes) - 1
+        if nonzero_index >= 0:
+            nonzero_value = nonzero_values[nonzero_index]
+            threshold = class_vector[0, nonzero_value]
+
+            # Permit batch index
+            class_vector[class_vector < threshold] = 0
+        """
 
         return class_vector.astype('float32')
 
