@@ -7,6 +7,7 @@ from model.individual import Individual
 from model.images import save_image, save_interpolations
 from model.interpolation import Interpolation
 from model.gan import GAN
+from model.orthogonal import find_orthogonal_basis
 
 from presenter.logger import Logger
 from presenter.helper import extract_parent_from_logger
@@ -39,16 +40,19 @@ class Evolution:
         self._make_children(self.generation.index)
 
     def _make_children(self, generation_index):
+
+        orthogonal_noise_basis = find_orthogonal_basis(self.parent.dim_z, self.n_children)
         last_child_index = self.n_children - 1
 
         for child_index in range(last_child_index):
             self.children[child_index] = copy.deepcopy(self.parent)
 
-            self.children[child_index].mutate()
+            self.children[child_index].mutate(orthogonal_noise_basis[:, child_index])
             self._generate_child_image(generation_index, child_index)
 
         # Add a random child to the candidate pool
         self.children[last_child_index] = Individual()
+        self.children[last_child_index].mutate(orthogonal_noise_basis[:, last_child_index])
         self._generate_child_image(generation_index, last_child_index)
 
         #random.shuffle(self.children)

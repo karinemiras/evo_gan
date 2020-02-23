@@ -18,19 +18,23 @@ from presenter.evolution import Evolution
 
 from presenter.generation import Generation
 from view.QMovieLabel import QMovieLabel
-
+from view.QEvolutionHistory import QEvolutionHistory
+from view.QFamilyTree import QFamilyTree
+from view.QCandidatesView import QCandidatesView
 
 class EvolutionGUI(QMainWindow):
-    def __init__(self):
+    def __init__(self, demo = False):
         super(EvolutionGUI, self).__init__()
 
         self.generation = Generation.getInstance()
 
-        # TODO externalize
-        self.n_children = 3
-        batch_size = 5
-        interpolation_frames = 5
-        self.evolution = Evolution(interpolation_frames, self.n_children, batch_size, resolution=128)
+        if demo is False:
+            n_children = 5
+            batch_size = 5
+            interpolation_frames = 5
+            self.evolution = Evolution(interpolation_frames, n_children, batch_size, resolution=128)
+        else:
+            self.evolution = None
 
         self.window_width = 1000
         window_height = 1000
@@ -44,52 +48,35 @@ class EvolutionGUI(QMainWindow):
         self.candidate_image_path = "../../imgs/children/iteration{}_candidate{}.png"
         self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
 
-        self.candidate_box = QGroupBox()
-        self.candidate_layout = QHBoxLayout()
-        self.candidate_buttons = [None] * self.n_children
 
-        for child_index in range(self.n_children):
-            self.candidate_buttons[child_index] = QPushButton("", self)
-            self.candidate_buttons[child_index].clicked.connect(partial(self.visualize_generation, child_index))
-            self.candidate_layout.addWidget(self.candidate_buttons[child_index])
-            self.candidate_buttons[child_index].setIconSize(QtCore.QSize(self.image_size, self.image_size))
+        self.family_tree = QFamilyTree(self)
 
-        self.candidate_box.setLayout(self.candidate_layout)
+        self.candidates = QCandidatesView(self.visualize_generation, self)
 
-        self.parent = QLabel(self)
+        self.history = QEvolutionHistory(self)
 
-        self.main_layout = QVBoxLayout()
-        self.main_layout.addWidget(self.candidate_box)
-        self.main_layout.addWidget(self.parent)
-
-        self.animation = QMovieLabel('', self)
-        self.animation.adjustSize()
-        self.animation.show()
-        self.main_layout.addWidget(self.animation)
+        self.main_layout = QGridLayout()
+        self.main_layout.addWidget(self.family_tree, 0, 0)
+        self.main_layout.addWidget(self.candidates, 0, 1)
+        self.main_layout.addWidget(self.history, 0, 2)
 
         self.widget = QWidget()
         self.widget.setLayout(self.main_layout)
-
         self.widget.show()
 
         self.visualize_generation()
 
     def visualize_generation(self, index=None):
         if index is not None:
-            self.evolution.process_generation(index)
+            if self.evolution is not None:
+                self.evolution.process_generation(index)
             self.generation.index += 1
 
-        parent_path = self.parent_image_path.format(self.generation.index)
-        parent_image = QPixmap(parent_path)
-        self.parent.setPixmap(parent_image)
+        self.family_tree.update()
 
-        for child_index in range(self.n_children):
-            candidate_path = self.candidate_image_path.format(self.generation.index, child_index)
-            self.candidate_buttons[child_index].setIcon(QtGui.QIcon(candidate_path))
+        self.candidates.update()
 
-        self.animation.initialize(self.animation_image_path.format(self.generation.index))
-        self.animation.adjustSize()
-        self.animation.show()
+        self.history.update()
 
 
 if __name__ == '__main__':
@@ -97,5 +84,5 @@ if __name__ == '__main__':
 
     #evolution = Evolution(interpolation_frames, n_children, batch_size, resolution=128, logger=logger)
     app = QApplication(sys.argv)
-    w = EvolutionGUI()
+    w = EvolutionGUI(True)
     sys.exit(app.exec_())

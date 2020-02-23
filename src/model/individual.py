@@ -15,7 +15,7 @@ class Individual:
         # Sigma should be between 0 and 1
         self.vector_threshold = vector_threshold
         self.batch_size = 1
-        self.max_classes = 5
+        self.max_classes = 2
 
         self.image = None
 
@@ -39,9 +39,13 @@ class Individual:
         self.noise_vector = truncated_noise_sample(truncation=self.truncation, dim_z=self.dim_z,
                                                    batch_size=self.batch_size).astype('float32')
 
-    def mutate(self):
+    def mutate(self, noise=None):
         self._mutate_class_vector()
-        self._mutate_noise_vector()
+
+        if noise is None:
+            self._mutate_noise_vector()
+        else:
+            self.noise_vector = noise.reshape(1, self.dim_z).astype('float32')
 
     def _mutate_noise_vector(self):
         self.noise_vector = (np.random.randn(self.batch_size, self.dim_z) * self.vector_threshold
@@ -81,7 +85,6 @@ class Individual:
             class_vector[index, random_classes] = self.vector_threshold + \
                                                      (1 - self.vector_threshold) * np.random.rand(number_of_random_classes)
 
-        """
         # TODO allow for batch size
         nonzero_values = np.flatnonzero(class_vector[0])
         np.sort(nonzero_values)
@@ -93,7 +96,7 @@ class Individual:
 
             # Permit batch index
             class_vector[class_vector < threshold] = 0
-        """
+
 
         return class_vector.astype('float32')
 
