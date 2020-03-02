@@ -1,13 +1,12 @@
 
-from PyQt5 import QtGui, QtCore
-import PyQt5.QtCore
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QMovie, QPainter, QPixmap
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QWidget
-from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QPushButton, QHBoxLayout, QGroupBox, QDialog, QVBoxLayout, QGridLayout
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-import PyQt5.QtCore
+import PySide2
+
+from PySide2.QtCore import (QCoreApplication, QMetaObject, QObject, QPoint,
+    QRect, QSize, QUrl, Qt)
+from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
+    QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
+    QRadialGradient, QMovie)
+from PySide2.QtWidgets import *
 
 class QMovieLabel(QLabel):
 
@@ -16,7 +15,7 @@ class QMovieLabel(QLabel):
         self.initialize(fileName)
 
     def initialize(self, fileName):
-        m = QtGui.QMovie(fileName)
+        m = QMovie(fileName)
         self.setMovie(m)
         m.start()
 

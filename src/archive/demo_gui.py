@@ -37,7 +37,7 @@ class DemoGUI(QMainWindow):
         self.setFixedSize(self.window_width, window_height)
 
         self.parent_image_path = "../../imgs/parent/iteration{}_main.png"
-        self.candidate_image_path = "../../imgs/children/iteration{}_candidate{}.png"
+        self.candidate_image_path = "../../imgs/candidate/iteration{}_candidate{}.png"
         self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
 
         self.candidate_box = QGroupBox()

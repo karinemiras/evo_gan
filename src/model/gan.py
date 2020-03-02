@@ -1,8 +1,8 @@
 import torch
 import os
+import numpy as np
 
 from model.biggan import (BigGAN)
-from model.images import process_image
 
 
 class GAN:
@@ -32,7 +32,13 @@ class GAN:
 
         with torch.no_grad():
             images = self.model(noise_vectors, class_vectors, self.truncation).to('cpu').numpy()
-            return [process_image(image, False) for image in images]
+            return [process_image(image) for image in images]
+
+
+def process_image(image):
+    image = np.clip((image.transpose((1, 2, 0)) + 1) / 2., 0, 1)
+
+    return (image * 255).astype("uint8")
 
 
 if __name__ == "__main__":

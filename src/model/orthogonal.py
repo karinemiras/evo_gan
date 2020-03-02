@@ -1,14 +1,21 @@
 import numpy as np
 from numpy.linalg import lstsq
 
+from model.individual import Individual
 
-def find_orthogonal_basis(dimension, n_children):
+
+def find_orthogonal_basis(n_children, initial=None):
+    dimension = Individual.dim_z
 
     if dimension < n_children:
         print("Not enough dimensions for the number of children specified.")
         raise Exception
 
-    basis = np.zeros((dimension, n_children))
+    if initial is None:
+        basis = np.zeros((dimension, n_children))
+    else:
+        basis = initial
+
     basis[:, 0] = np.random.rand(dimension)
     # get 5 orthogonal vectors in 10 dimensions in a matrix form
 

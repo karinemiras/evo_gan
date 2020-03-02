@@ -3,7 +3,7 @@
 .idea
 imgs/parent/
 imgs/interpolations/
-imgs/children/
+imgs/candidate/
 biggan/
 logs/generation_log.json
 *.pyc

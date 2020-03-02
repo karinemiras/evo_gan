@@ -7,17 +7,18 @@ import math
 class Individual:
 
     number_of_classes = 1000
+    dim_z = 128
 
     def __init__(self, truncation=0.4, vector_threshold=0.25):
 
         self.truncation = truncation
-        self.dim_z = 128
         # Sigma should be between 0 and 1
         self.vector_threshold = vector_threshold
         self.batch_size = 1
         self.max_classes = 2
 
         self.image = None
+        self.fitness = 0
 
         self.class_vector = None
         self.noise_vector = None
@@ -31,6 +32,11 @@ class Individual:
         else:
             self.class_vector = np.array(log_dict["class"]).astype('float32')
             self.noise_vector = np.array(log_dict["noise"]).astype('float32')
+
+    def set_values(self, class_vector, noise_vector, image):
+        self.class_vector = class_vector.astype('float32')
+        self.noise_vector = noise_vector.astype('float32')
+        self.image = image
 
     def _create_random_class_vector(self):
         self.class_vector = self._insert_random_class_vectors()
@@ -102,7 +108,7 @@ class Individual:
 
     def _get_number_of_random_classes(self):
         # use an logarithmic formula to calculate the number of successive random changes of adding a new random class
-        # https://www.wolframalpha.com/input/?i=log_0.25%28x%29
+        # https://www.wolframalpha.com/input/?i=log_0.25%28x%29+for+x+between+0+and+1
         #
         # This construction replaces the need for the weird while loops
         # while True:

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QApplication
 
 from presenter.evolution import Evolution
 from presenter.logger import Logger
-from view.evolution_gui import EvolutionGUI
+from view.old.evolution_gui import EvolutionGUI
 
 
 evolution: Evolution = None
@@ -23,17 +23,13 @@ def request_candidate(child_index: int):
 
 
 def main():
-    global evolution, logger
-
-    logger = Logger()
-
-    logger.open_log(template=True)
+    global evolution
 
     n_children = 3
     batch_size = 5
     interpolation_frames = 5
 
-    evolution = Evolution(interpolation_frames, n_children, batch_size, resolution=128, logger=logger)
+    evolution = Evolution(interpolation_frames, n_children, batch_size, resolution=128)
 
     request_candidate(0)
     request_candidate(1)
