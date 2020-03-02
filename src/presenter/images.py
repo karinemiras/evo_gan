@@ -4,7 +4,7 @@ import imageio
 
 from presenter.generation import Generation
 
-save_image_folder = "../../imgs/"
+save_image_folder = "../imgs/"
 
 generation = Generation.getInstance()
 
@@ -25,10 +25,12 @@ def save_interpolations(images):
 
 def save_parent_image(gan, parent, generate=False):
     global generation
+    index = generation.index + 1
     if generate:
         parent.image = gan.get_model_image(parent)
+        index = index - 1
 
-    filename = "parent/iteration{}_0.png".format(generation.index + 1)
+    filename = "parent/iteration{}_0.png".format(index)
     save_image(filename, parent.image)
 
     return filename, parent

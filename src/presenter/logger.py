@@ -7,7 +7,7 @@ from presenter.generation import Generation
 
 class Logger:
 
-    log_folder = "../../logs/"
+    log_folder = "../logs/"
     regular_filename = "generation_log.json"
     template_filename = "template_log.json"
 

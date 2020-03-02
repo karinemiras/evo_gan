@@ -24,8 +24,8 @@ class HistoryManager:
 
         self.generation = Generation.getInstance()
 
-        self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
-        self.template_image_path = "../../../resources/template.png"
+        self.animation_image_path = "../imgs/interpolations/iteration{}_main.gif"
+        self.template_image_path = "../resources/template.png"
 
         self.history_movies = [None] * self.history_length
         for child_index in range(self.history_length):

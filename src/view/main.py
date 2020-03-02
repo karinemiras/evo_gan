@@ -34,7 +34,7 @@ class EvolutionView(QMainWindow):
             n_population = 10
             n_candidates = 3
             batch_size = 1
-            interpolation_frames = 10
+            interpolation_frames = 25
             self.evolution = Evolution(interpolation_frames, n_population, n_candidates, batch_size, resolution=128)
         else:
             self.evolution = None
@@ -79,7 +79,7 @@ class EvolutionView(QMainWindow):
         #self.history_manager.update()
 
     def _transition_scheduler(self):
-        time.sleep(3)
+        time.sleep(10)
         self.candidate_manager.update()
         self.display_state = "candidates"
 
@@ -94,7 +94,7 @@ class EvolutionView(QMainWindow):
 
 
 if __name__ == '__main__':
-    is_demo = True
+    is_demo = False
     app = QApplication(sys.argv)
     w = EvolutionView(is_demo)
     w.show()

@@ -22,9 +22,9 @@ class EvolutionTreeManager:
 
         self.generation = Generation.getInstance()
 
-        self.parent_image_path = "../../imgs/parent/iteration{}_{}.png"
-        self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
-        self.template_image_path = "../../../resources/template.png"
+        self.parent_image_path = "../imgs/parent/iteration{}_{}.png"
+        self.animation_image_path = "../imgs/interpolations/iteration{}_main.gif"
+        self.template_image_path = "../resources/template.png"
 
         self.parent_images = parent_images
 

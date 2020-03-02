@@ -28,10 +28,10 @@ class CandidateManager:
 
         self.generation = Generation.getInstance()
 
-        self.parent_image_path = "../../imgs/parent/iteration{}_0.png"
-        self.candidate_image_path = "../../imgs/candidate/iteration{}_{}.png"
-        self.template_image_path = "../../../resources/template.png"
-        self.loading_image_path = "../../resources/loading.gif"
+        self.parent_image_path = "../imgs/parent/iteration{}_0.png"
+        self.candidate_image_path = "../imgs/candidate/iteration{}_{}.png"
+        self.template_image_path = "../resources/template.png"
+        self.loading_image_path = "../resources/loading.gif"
 
         self.parent_image = parent_image
 
