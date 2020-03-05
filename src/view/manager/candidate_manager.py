@@ -30,7 +30,7 @@ class CandidateManager:
 
         self.parent_image_path = "../../imgs/parent/iteration{}_0.png"
         self.candidate_image_path = "../../imgs/candidate/iteration{}_{}.png"
-        self.template_image_path = "../../../resources/template.png"
+        self.template_image_path = "../../resources/template.png"
         self.loading_image_path = "../../resources/loading.gif"
 
         self.parent_image = parent_image
@@ -53,11 +53,17 @@ class CandidateManager:
 
         self.visibility = False
 
+        loading_path = self.loading_image_path.format(self.generation.index)
+        if not os.path.exists(loading_path):
+            loading_path = self.template_image_path
+
+        self.loading_label.initialize(loading_path)
+        self.loading_label.setScaledContents(True)
+
         self.visible(True)
 
     def visible(self, state):
         if state != self.visibility:
-            print("visible ", state)
             if state:
                 for element in self.elements:
                     element.show()
@@ -72,9 +78,12 @@ class CandidateManager:
             self.visibility = state
 
     def loading(self):
-        print("loading")
         for loading_element in self.loading_elements:
             loading_element.show()
+
+    def unloading(self):
+        for loading_element in self.loading_elements:
+            loading_element.hide()
 
     def update(self):
         parent_path = self.parent_image_path.format(self.generation.index)
@@ -94,16 +103,4 @@ class CandidateManager:
             icon = QIcon(candidate_image.scaled(self.icon_size, self.icon_size))
             self.candidate_buttons[candidate_index].setIcon(icon)
 
-        loading_path = self.loading_image_path.format(self.generation.index)
-        if not os.path.exists(loading_path):
-            loading_path = self.template_image_path
-
-        """
-        child_image = QPixmap(child_path)
-
-        self.child_image.setPixmap(child_image)
-        self.child_image.setScaledContents(True)
-        """
-
-        self.loading_label.initialize(loading_path)
-        self.loading_label.setScaledContents(True)
+        self.loading_label.movie.start()

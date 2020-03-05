@@ -24,7 +24,7 @@ class EvolutionTreeManager:
 
         self.parent_image_path = "../../imgs/parent/iteration{}_{}.png"
         self.animation_image_path = "../../imgs/interpolations/iteration{}_main.gif"
-        self.template_image_path = "../../../resources/template.png"
+        self.template_image_path = "../../resources/template.png"
 
         self.parent_images = parent_images
 
@@ -54,10 +54,9 @@ class EvolutionTreeManager:
 
     def update(self):
         for parent_index in range(self.number_of_parents):
-            parent_path = self.parent_image_path.format(self.generation.index - 1, parent_index)
+            parent_path = self.parent_image_path.format(self.generation.index, parent_index)
             if not os.path.exists(parent_path):
                 parent_path = self.template_image_path
-
             parent_image = QPixmap(parent_path)
             self.parent_images[parent_index].setPixmap(parent_image)
             self.parent_images[parent_index].setScaledContents(True)
@@ -75,4 +74,4 @@ class EvolutionTreeManager:
 
         self.child_image.initialize(child_path)
         self.child_image.setScaledContents(True)
-        self.child_image.show()
+

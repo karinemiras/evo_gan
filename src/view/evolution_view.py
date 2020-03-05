@@ -4,7 +4,9 @@ import asyncio
 import threading
 from threading import Lock
 
+from PySide2.QtGui import *
 from PySide2.QtWidgets import *
+from PySide2.QtCore import *
 
 from view.evolution_combined_gui import Ui_MainWindow
 
@@ -16,6 +18,8 @@ from view.manager.evolution_tree_manager import EvolutionTreeManager
 from presenter.evolution import Evolution
 from view.manager.history_manager import HistoryManager
 
+from view.multithreading_helper import Worker
+
 
 class EvolutionView(QMainWindow):
 
@@ -23,6 +27,9 @@ class EvolutionView(QMainWindow):
         super(EvolutionView, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.generation = Generation.getInstance()
 
@@ -34,7 +41,7 @@ class EvolutionView(QMainWindow):
             n_population = 10
             n_candidates = 3
             batch_size = 1
-            interpolation_frames = 10
+            interpolation_frames = 25
             self.evolution = Evolution(interpolation_frames, n_population, n_candidates, batch_size, resolution=128)
         else:
             self.evolution = None
@@ -56,32 +63,36 @@ class EvolutionView(QMainWindow):
         #history_images = [self.ui.history_image_1, self.ui.history_image_2, self.ui.history_image_3]
         #self.history_manager = HistoryManager(history_images, self.ui.centralwidget)
 
+    def process_evolution(self, index):
+
+
+        self.candidate_manager.loading()
+
+        if self.evolution is not None:
+            self.evolution.process_generation(index)
+        else:
+            self.generation.index += 1
+            time.sleep(3)
+
+        self.candidate_manager.unloading()
+
+        self.display_state = "tree"
+        time.sleep(5) # 10
+        self.candidate_manager.update()
+        self.display_state = "candidates"
+
+
     def visualize_generation(self, index=None):
         if index is not None:
-            self.display_state = "tree"
 
-            self.candidate_manager.loading()
-
-            if self.evolution is not None:
-                x = threading.Thread(target=self.evolution.process_generation, args=(index, ))
-                x.start()
-                self.candidate_manager.update()
-                x.join()
-            else:
-                self.generation.index += 1
-
-            y = threading.Thread(target=self._transition_scheduler, args=())
-            y.start()
-
-            #asyncio.run(self._transition_scheduler())
+            worker = Worker(self.process_evolution, index)  # Any other args, kwargs are passed to the run function
+            #worker.signals.result.connect(self.print_output)
+            #worker.signals.finished.connect(self.thread_complete)
+            self.threadpool.start(worker)
 
         self.evolution_tree_manager.update()
         #self.history_manager.update()
 
-    def _transition_scheduler(self):
-        time.sleep(3)
-        self.candidate_manager.update()
-        self.display_state = "candidates"
 
     def paintEvent(self, event):
         if self.display_state == "candidates":

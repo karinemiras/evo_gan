@@ -14,10 +14,12 @@ class QMovieLabel(QLabel):
         super(QMovieLabel, self).__init__(parent)
         self.initialize(fileName)
 
+        self.movie = None
+
     def initialize(self, fileName):
-        m = QMovie(fileName)
-        self.setMovie(m)
-        m.start()
+        self.movie = QMovie(fileName)
+        self.setMovie(self.movie)
+        self.movie.start()
 
     def setMovie(self, movie):
         super(QMovieLabel, self).setMovie(movie)
