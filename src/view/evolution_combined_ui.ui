@@ -314,13 +314,13 @@
     </property>
    </widget>
    <zorder>parent_arrows</zorder>
+   <zorder>child_image</zorder>
    <zorder>parent_image</zorder>
    <zorder>mate_label</zorder>
    <zorder>candidate_1_button</zorder>
    <zorder>candidate_3_button</zorder>
    <zorder>parent_label</zorder>
    <zorder>candidate_2_button</zorder>
-   <zorder>child_image</zorder>
    <zorder>parent_1_image</zorder>
    <zorder>parent_1_label</zorder>
    <zorder>parent_2_label</zorder>

@@ -1,5 +1,5 @@
 from PyQt5 import QtGui
-from PyQt5.QtCore import QThread, SIGNAL
+from PyQt5.QtCore import QThread, Signal
 import sys
 import design
 import urllib2
@@ -58,7 +58,7 @@ class getPostsThread(QThread):
         """
         for subreddit in self.subreddits:
             top_post = self._get_top_post(subreddit)
-            self.emit(SIGNAL('add_post(QString)'), top_post)
+            self.emit(Signal('add_post(QString)'), top_post)
             self.sleep(2)
 
 
@@ -102,7 +102,7 @@ class ThreadingTutorial(QtGui.QMainWindow, design.Ui_MainWindow):
         # Adding post will be handeled in the add_post method and the signal that
         # the thread will emit is  SIGNAL("add_post(QString)")
         # the rest is same as we can use to connect any signal
-        self.connect(self.get_thread, SIGNAL("add_post(QString)"), self.add_post)
+        self.connect(self.get_thread, Signal("add_post(QString)"), self.add_post)
 
         # This is pretty self explanatory
         # regardless of whether the thread finishes or the user terminates it
@@ -110,7 +110,7 @@ class ThreadingTutorial(QtGui.QMainWindow, design.Ui_MainWindow):
         # and regardless of whether it was terminated or finished by itself
         # the finished signal will go off. So we don't need to catch the
         # terminated one specifically, but we could if we wanted.
-        self.connect(self.get_thread, SIGNAL("finished()"), self.done)
+        self.connect(self.get_thread, Signal("finished()"), self.done)
 
         # We have all the events we need connected we can start the thread
         self.get_thread.start()
