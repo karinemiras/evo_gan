@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>breeding_pictures</class>
+ <widget class="QMainWindow" name="breeding_pictures">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,16 +11,16 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Breeding Pictures</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="parent_image">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>250</y>
-      <width>250</width>
-      <height>250</height>
+      <x>120</x>
+      <y>200</y>
+      <width>350</width>
+      <height>350</height>
      </rect>
     </property>
     <property name="text">
@@ -36,21 +36,25 @@
    <widget class="QLabel" name="mate_label">
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>25</y>
-      <width>251</width>
-      <height>51</height>
+      <x>740</x>
+      <y>30</y>
+      <width>531</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <family>Tauri</family>
+      <pointsize>36</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
     <property name="text">
-     <string>Choose a mate</string>
+     <string>Choose a Parent 2</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -59,10 +63,10 @@
    <widget class="QPushButton" name="candidate_1_button">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>90</y>
-      <width>175</width>
-      <height>175</height>
+      <x>743</x>
+      <y>122</y>
+      <width>225</width>
+      <height>225</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -77,18 +81,21 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>175</width>
-      <height>175</height>
+      <width>250</width>
+      <height>250</height>
      </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QPushButton" name="candidate_3_button">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>490</y>
-      <width>175</width>
-      <height>175</height>
+      <x>1023</x>
+      <y>122</y>
+      <width>225</width>
+      <height>225</height>
      </rect>
     </property>
     <property name="text">
@@ -100,29 +107,36 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>175</width>
-      <height>175</height>
+      <width>250</width>
+      <height>250</height>
      </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="parent_label">
     <property name="geometry">
      <rect>
-      <x>200</x>
-      <y>195</y>
-      <width>251</width>
+      <x>60</x>
+      <y>70</y>
+      <width>471</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
+      <family>Tauri</family>
+      <pointsize>36</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
     <property name="text">
-     <string>Current parent</string>
+     <string>Parent 1</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -131,10 +145,10 @@
    <widget class="QPushButton" name="candidate_2_button">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>290</y>
-      <width>175</width>
-      <height>175</height>
+      <x>743</x>
+      <y>402</y>
+      <width>225</width>
+      <height>225</height>
      </rect>
     </property>
     <property name="text">
@@ -146,9 +160,12 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>175</width>
-      <height>175</height>
+      <width>250</width>
+      <height>250</height>
      </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
     </property>
    </widget>
    <widget class="QLabel" name="child_image">
@@ -157,8 +174,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>575</x>
-      <y>400</y>
+      <x>515</x>
+      <y>360</y>
       <width>250</width>
       <height>250</height>
      </rect>
@@ -179,10 +196,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>100</y>
-      <width>250</width>
-      <height>250</height>
+      <x>340</x>
+      <y>82</y>
+      <width>200</width>
+      <height>200</height>
      </rect>
     </property>
     <property name="text">
@@ -201,21 +218,25 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>350</x>
-      <y>50</y>
-      <width>251</width>
+      <x>330</x>
+      <y>10</y>
+      <width>221</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <family>Tauri</family>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
     <property name="text">
-     <string>Current parent</string>
+     <string>Parent 1</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -227,21 +248,25 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>50</y>
-      <width>251</width>
+      <x>727</x>
+      <y>10</y>
+      <width>206</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>24</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <family>Tauri</family>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
     <property name="text">
-     <string>Choosen mate</string>
+     <string>Parent 2</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -253,11 +278,14 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>110</y>
-      <width>481</width>
-      <height>381</height>
+      <x>397</x>
+      <y>81</y>
+      <width>486</width>
+      <height>421</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -275,10 +303,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>800</x>
-      <y>100</y>
-      <width>250</width>
-      <height>250</height>
+      <x>729</x>
+      <y>82</y>
+      <width>200</width>
+      <height>200</height>
      </rect>
     </property>
     <property name="text">
@@ -297,10 +325,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>530</x>
-      <y>250</y>
-      <width>250</width>
-      <height>250</height>
+      <x>580</x>
+      <y>325</y>
+      <width>100</width>
+      <height>100</height>
      </rect>
     </property>
     <property name="text">
@@ -313,19 +341,309 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="candidate_4_button">
+    <property name="geometry">
+     <rect>
+      <x>1023</x>
+      <y>402</y>
+      <width>225</width>
+      <height>225</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../../resources/question_mark.png</normaloff>../../resources/question_mark.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>250</width>
+      <height>250</height>
+     </size>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="candidate_4_frame">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>380</y>
+      <width>270</width>
+      <height>270</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="candidate_2_frame">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>380</y>
+      <width>270</width>
+      <height>270</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="candidate_1_frame">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>720</x>
+      <y>100</y>
+      <width>270</width>
+      <height>270</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="candidate_3_frame">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>1000</x>
+      <y>100</y>
+      <width>270</width>
+      <height>270</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="parent_frame">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>120</y>
+      <width>510</width>
+      <height>510</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame_parent.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="background_image">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1280</width>
+      <height>720</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/tree_background_blurred.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="child_frame">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>298</y>
+      <width>380</width>
+      <height>375</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame_parent.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="parent_1_frame">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>327</x>
+      <y>71</y>
+      <width>225</width>
+      <height>220</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="parent_2_frame">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>717</x>
+      <y>71</y>
+      <width>225</width>
+      <height>220</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../../resources/image_frame.png</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="breeding_label">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>660</y>
+      <width>771</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Tauri</family>
+      <pointsize>28</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
+    <property name="text">
+     <string>Please Hold – Breeding Taking Place.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="child_label">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>670</y>
+      <width>361</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Tauri</family>
+      <pointsize>30</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color : white;</string>
+    </property>
+    <property name="text">
+     <string>Child</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <zorder>background_image</zorder>
    <zorder>parent_arrows</zorder>
-   <zorder>child_image</zorder>
+   <zorder>candidate_1_frame</zorder>
+   <zorder>candidate_3_frame</zorder>
+   <zorder>candidate_4_frame</zorder>
+   <zorder>candidate_2_frame</zorder>
    <zorder>parent_image</zorder>
    <zorder>mate_label</zorder>
-   <zorder>candidate_1_button</zorder>
-   <zorder>candidate_3_button</zorder>
    <zorder>parent_label</zorder>
-   <zorder>candidate_2_button</zorder>
-   <zorder>parent_1_image</zorder>
    <zorder>parent_1_label</zorder>
    <zorder>parent_2_label</zorder>
-   <zorder>parent_2_image</zorder>
    <zorder>loading_animation</zorder>
+   <zorder>candidate_2_button</zorder>
+   <zorder>candidate_4_button</zorder>
+   <zorder>candidate_1_button</zorder>
+   <zorder>candidate_3_button</zorder>
+   <zorder>parent_frame</zorder>
+   <zorder>parent_1_image</zorder>
+   <zorder>parent_1_frame</zorder>
+   <zorder>child_image</zorder>
+   <zorder>child_frame</zorder>
+   <zorder>parent_2_image</zorder>
+   <zorder>parent_2_frame</zorder>
+   <zorder>breeding_label</zorder>
+   <zorder>child_label</zorder>
   </widget>
  </widget>
  <resources/>
