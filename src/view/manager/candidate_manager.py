@@ -20,7 +20,7 @@ from view.QMovieLabel import QMovieLabel
 
 class CandidateManager:
 
-    def __init__(self, parent_image, parent_frame, candidate_buttons, candidate_frames, parent_label, candidate_label, loading_label, breeding_label, central_widget, function):
+    def __init__(self, parent_image, parent_frame, candidate_buttons, candidate_frames, parent_label, candidate_label, function):
 
         self.number_of_candidates = len(candidate_buttons)
         print("number of candidates", self.number_of_candidates)
@@ -32,7 +32,7 @@ class CandidateManager:
         self.parent_image_path = "../imgs/parent/iteration{}_0.png"
         self.candidate_image_path = "../imgs/candidate/iteration{}_{}.png"
         self.template_image_path = "../resources/template.png"
-        self.loading_image_path = "../resources/yellow_loading.gif"
+
         self.parent_frame_path = "../resources/image_frame_parent.png"
         self.candidate_frame_path = "../resources/image_frame.png"
 
@@ -50,18 +50,6 @@ class CandidateManager:
         self.elements.extend(self.candidate_buttons)
         self.elements.extend(self.candidate_frames)
         self.elements.extend([parent_label, self.parent_frame, candidate_label, ])
-
-        self.loading_label = QMovieLabel(self.template_image_path, central_widget)
-        self.loading_label.setObjectName(u"history_image")
-        self.loading_label.setGeometry(loading_label.geometry())
-        self.loading_label.setScaledContents(True)
-        self.loading_elements = [loading_label, self.loading_label, breeding_label]
-
-        loading_path = self.loading_image_path.format(self.generation.index)
-        if not os.path.exists(loading_path):
-            loading_path = self.template_image_path
-        self.loading_label.initialize(loading_path)
-        self.loading_label.setScaledContents(True)
 
         self.wait = False
 
@@ -111,23 +99,11 @@ class CandidateManager:
             if state:
                 for element in self.elements:
                     element.show()
-                for loading_element in self.loading_elements:
-                    loading_element.hide()
             else:
                 for element in self.elements:
                     element.hide()
-                for loading_element in self.loading_elements:
-                    loading_element.hide()
 
             self.visibility = state
-
-    def loading(self):
-        for loading_element in self.loading_elements:
-            loading_element.show()
-
-    def unloading(self):
-        for loading_element in self.loading_elements:
-            loading_element.hide()
 
     def update(self):
         parent_path = self.parent_image_path.format(self.generation.index)
@@ -153,4 +129,4 @@ class CandidateManager:
 
             self.candidate_frames[candidate_index].setPixmap(QPixmap(self.candidate_frame_path))
 
-        self.loading_label.movie.start()
+

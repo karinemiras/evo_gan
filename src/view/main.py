@@ -14,6 +14,8 @@ from view.manager.candidate_manager import CandidateManager
 from presenter.generation import Generation
 
 from view.manager.evolution_tree_manager import EvolutionTreeManager
+from view.manager.loading_manager import LoadingManager
+
 
 from presenter.evolution import Evolution
 from view.manager.history_manager import HistoryManager
@@ -25,20 +27,6 @@ class EvolutionView(QMainWindow):
 
     def __init__(self, demo=False):
         super(EvolutionView, self).__init__()
-        self.ui = Ui_breeding_pictures()
-        self.ui.setupUi(self)
-
-        background_path = "../resources/tree_background_blurred.png"
-        self.ui.background_image.setPixmap(QPixmap(background_path))
-
-        self.threadpool = QThreadPool()
-        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
-
-        self.generation = Generation.getInstance()
-
-        self.display_lock = Lock()
-
-
 
         if demo is False:
             n_population = 10
@@ -49,6 +37,19 @@ class EvolutionView(QMainWindow):
         else:
             self.evolution = None
 
+        self.ui = Ui_breeding_pictures()
+        self.ui.setupUi(self)
+
+        background_path = "../resources/tree_abstract_blurred.png"
+        self.ui.background_image.setPixmap(QPixmap(background_path))
+
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+        self.generation = Generation.getInstance()
+
+        self.display_lock = Lock()
+
         self.image_size = 128
 
         #self.ui.centralwidget.setStyleSheet('background:rgb(230,238,241);')
@@ -56,14 +57,16 @@ class EvolutionView(QMainWindow):
         candidate_buttons = [self.ui.candidate_1_button, self.ui.candidate_2_button, self.ui.candidate_3_button, self.ui.candidate_4_button]
         candidate_frames = [self.ui.candidate_1_frame, self.ui.candidate_2_frame, self.ui.candidate_3_frame, self.ui.candidate_4_frame]
         self.candidate_manager = CandidateManager(self.ui.parent_image, self.ui.parent_frame, candidate_buttons, candidate_frames, self.ui.parent_label,
-                                                  self.ui.mate_label, self.ui.loading_animation, self.ui.breeding_label, self.ui.centralwidget, self.visualize_generation)
+                                                  self.ui.mate_label, self.visualize_generation)
+
+        self.loading_manager = LoadingManager(self.ui.loading_animation, self.ui.breeding_label, self.ui.centralwidget)
 
         self.candidate_manager.update()
 
         parent_images = [self.ui.parent_1_image, self.ui.parent_2_image]
         parent_frames = [self.ui.parent_1_frame, self.ui.parent_2_frame]
         self.evolution_tree_manager = EvolutionTreeManager(parent_images, parent_frames, self.ui.child_image, self.ui.child_frame, self.ui.parent_arrows,
-                                                           self.ui.parent_1_label, self.ui.parent_2_label, self.ui.child_label, self.ui.centralwidget)
+                                                           self.ui.parent_1_label, self.ui.parent_2_label, self.ui.centralwidget)
 
         self.display_state = "candidates"
 
@@ -72,18 +75,22 @@ class EvolutionView(QMainWindow):
 
     def process_evolution(self, index):
 
-        self.candidate_manager.loading()
+        self.loading_manager.loading()
+
+        self.generation.index += 1
 
         if self.evolution is not None:
+            self.evolution.save_parents(index)
+            self.display_state = "tree"
+
             self.evolution.process_generation(index)
         else:
-            self.generation.index += 1
             time.sleep(3)
 
-        self.display_state = "tree"
-        self.candidate_manager.unloading()
+        self.evolution_tree_manager.update()
+        self.loading_manager.unloading()
 
-        time.sleep(10) # 10
+        time.sleep(3) # 10
 
         self.display_state = "candidates"
         self.candidate_manager.prepare_choice()
@@ -95,19 +102,25 @@ class EvolutionView(QMainWindow):
 
     def paintEvent(self, event):
         if self.display_state == "candidates":
+            self.candidate_manager.update()
+
             self.candidate_manager.visible(True)
             self.evolution_tree_manager.visible(False)
-            self.candidate_manager.update()
+            self.loading_manager.visible(False)
+
             self.display_state = ""
         elif self.display_state == "tree":
+            self.evolution_tree_manager.update()
+
             self.candidate_manager.visible(False)
             self.evolution_tree_manager.visible(True)
-            self.evolution_tree_manager.update()
+            self.loading_manager.visible(True)
+
             self.display_state = ""
 
 
 if __name__ == '__main__':
-    is_demo = True
+    is_demo = False
     app = QApplication(sys.argv)
     w = EvolutionView(is_demo)
     w.show()

@@ -17,7 +17,7 @@ from view.QMovieLabel import QMovieLabel
 
 class EvolutionTreeManager:
 
-    def __init__(self, parent_images, parent_frames, child_image, child_frame, parent_arrow, parent_1_label, parent_2_label, child_label, central_widget):
+    def __init__(self, parent_images, parent_frames, child_image, child_frame, parent_arrow, parent_1_label, parent_2_label, central_widget):
         self.number_of_parents = len(parent_images)
 
         self.generation = Generation.getInstance()
@@ -49,7 +49,7 @@ class EvolutionTreeManager:
         self.elements = parent_images
         self.elements.extend(self.parent_frames)
         self.elements.extend([self.child_image, self.child_frame, child_image, self.child_movie,
-                              parent_arrow, parent_1_label, parent_2_label, child_label])
+                              parent_arrow, parent_1_label, parent_2_label])
 
         self.visibility = True
 
@@ -70,8 +70,10 @@ class EvolutionTreeManager:
 
         for parent_index in range(self.number_of_parents):
             parent_path = self.parent_image_path.format(self.generation.index - 1, parent_index)
+            print(parent_index, ": ", parent_path)
             if not os.path.exists(parent_path):
                 parent_path = self.template_image_path
+            print(parent_index, ": ", parent_path)
             parent_image = QPixmap(parent_path)
             self.parent_images[parent_index].setPixmap(parent_image)
             self.parent_images[parent_index].setScaledContents(True)

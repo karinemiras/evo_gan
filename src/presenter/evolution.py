@@ -2,7 +2,7 @@ import time
 import copy
 
 from model.individual import Individual
-from presenter.images import save_image, save_interpolations
+from presenter.images import save_image, save_interpolations, prepare_folders
 from model.interpolation import Interpolation
 from model.gan import GAN
 
@@ -18,6 +18,8 @@ class Evolution:
 
     def __init__(self, interpolation_frames, n_population, n_candidates, batch_size, resolution=128):
         self.batch_size = batch_size
+
+        prepare_folders()
 
         self.gan = GAN(resolution)
 
@@ -43,9 +45,11 @@ class Evolution:
         print("Interpolated_children in {} seconds".format(time.time()-t))
         save_interpolations(child_interpolations)
 
-        save_chosen_parent_image(chosen_candidate)
-
         self._set_parent(child)
+
+    def save_parents(self, child_index):
+        chosen_candidate = self.population.candidates[child_index]
+        save_chosen_parent_image(chosen_candidate)
 
     def _set_parent(self, child):
         self.parent = copy.deepcopy(child)
@@ -53,7 +57,6 @@ class Evolution:
 
     def process_generation(self, child_index):
         self._interpolate_candidate(child_index)
-        self.generation.index += 1
         self.population.cycle(self.gan)
 
 

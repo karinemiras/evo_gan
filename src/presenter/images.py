@@ -1,12 +1,27 @@
 import numpy as np
 import cv2
 import imageio
+import os
+import shutil
 
 from presenter.generation import Generation
 
 save_image_folder = "../imgs/"
 
 generation = Generation.getInstance()
+
+
+def prepare_folders():
+    folders = [save_image_folder + "candidate/", save_image_folder + "interpolations/", save_image_folder + "parent/",
+               save_image_folder + "population/"]
+
+    for folder in folders:
+        try:
+            shutil.rmtree(folder)
+            os.mkdir(folder)
+        except OSError as e:
+            print("Error: %s : %s" % (folder, e.strerror))
+
 
 
 def save_image(filename, image):
@@ -18,7 +33,7 @@ def save_image(filename, image):
 
 def save_interpolations(images):
     global generation
-    path = save_image_folder + "interpolations/iteration{}_main.gif".format(generation.index + 1)
+    path = save_image_folder + "interpolations/iteration{}_main.gif".format(generation.index)
     imageio.mimsave(path, images)
     return path
 
@@ -38,7 +53,7 @@ def save_parent_image(gan, parent, generate=False):
 
 def save_chosen_parent_image(individual):
     global generation
-    filename = "parent/iteration{}_1.png".format(generation.index)
+    filename = "parent/iteration{}_1.png".format(generation.index - 1)
     save_image(filename, individual.image)
 
     return filename

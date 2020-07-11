@@ -16,8 +16,6 @@ class Population:
         self.n_candidates = n_candidates
         self.n_replacements = n_replacements
 
-        self.generation = Generation.getInstance()
-
         self.individuals = np.array([None] * self.n_population)
         self.candidates = np.array([None] * self.n_candidates)
 
@@ -29,8 +27,6 @@ class Population:
             self.individuals[individual_index] = Individual()  # copy.deepcopy(self.parent)
 
             self.individuals[individual_index].mutate(self.orthogonal_noise_basis[:, individual_index])
-
-
 
     def cycle(self, gan):
         for individual_index in range(self.n_population):

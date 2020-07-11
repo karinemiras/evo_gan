@@ -278,10 +278,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>397</x>
-      <y>81</y>
+      <x>390</x>
+      <y>150</y>
       <width>486</width>
-      <height>421</height>
+      <height>281</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -325,8 +325,8 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>325</y>
+      <x>590</x>
+      <y>430</y>
       <width>100</width>
       <height>100</height>
      </rect>
@@ -592,35 +592,10 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="child_label">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>670</y>
-      <width>361</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Tauri</family>
-      <pointsize>30</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color : white;</string>
-    </property>
-    <property name="text">
-     <string>Child</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
    <zorder>background_image</zorder>
    <zorder>parent_arrows</zorder>
+   <zorder>child_image</zorder>
+   <zorder>child_frame</zorder>
    <zorder>candidate_1_frame</zorder>
    <zorder>candidate_3_frame</zorder>
    <zorder>candidate_4_frame</zorder>
@@ -638,12 +613,9 @@
    <zorder>parent_frame</zorder>
    <zorder>parent_1_image</zorder>
    <zorder>parent_1_frame</zorder>
-   <zorder>child_image</zorder>
-   <zorder>child_frame</zorder>
    <zorder>parent_2_image</zorder>
    <zorder>parent_2_frame</zorder>
    <zorder>breeding_label</zorder>
-   <zorder>child_label</zorder>
   </widget>
  </widget>
  <resources/>
