@@ -41,7 +41,7 @@ py==1.8.1
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.19
-pydantic==0.28
+pydantic==1.6.2
 pyparsing==2.4.6
 PyQt5==5.14.1
 PyQt5-sip==12.7.1
