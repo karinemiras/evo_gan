@@ -57,7 +57,7 @@ scipy==1.4.1
 shiboken2==5.14.1
 six==1.14.0
 tensorboard==2.1.0
-tensorflow==2.1.0
+tensorflow==2.5.1
 tensorflow-estimator==2.1.0
 tensorflow-gpu==2.1.0
 tensorflow-gpu-estimator==2.1.0
