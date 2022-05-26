@@ -66,7 +66,7 @@ termcolor==1.1.0
 torch==1.4.0
 torchvision==0.5.0
 tqdm==4.36.1
-ujson==1.35
+ujson==5.2.0
 urllib3==1.25.8
 wcwidth==0.1.8
 Werkzeug==1.0.0
